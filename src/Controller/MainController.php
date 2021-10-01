@@ -67,12 +67,7 @@ class MainController extends AbstractController
         Request $request
     )
     {
-        $datas = [
-            "Google Cloud Platform",
-            "Amazon AWS",
-            "Docker",
-            "Digital Ocean"
-        ];
+        $datas = $this->theMovieDBService->getMovies($request->get('search'));
 
         return new JsonResponse($datas);
     }

@@ -8,6 +8,10 @@
         ul.pagination li {
             cursor: pointer;
         }
+
+        .card-movie .card {
+            cursor: pointer;
+        }
     </style>
 {% endblock %}
 
@@ -21,66 +25,83 @@
                 
                 <div class="input-group mb-3">
                     <span class="input-group-text">Search</span>
-                    <input class="form-control basicAutoComplete" data-url="{{ path('main_ajax_autocomplete') }}" type="text" autocomplete="off" placeholder="Movie" aria-label="Movie">
+                    <input name="search" class="form-control basicAutoComplete" data-url="{{ path('main_ajax_autocomplete') }}" type="text" autocomplete="off" placeholder="Movie" aria-label="Movie">
                 </div>
-
-                <form id="genres-form" method="POST">
-                    {% for genre in genres %}
-                        <div class="form-check form-check-inline">
-                            <input onclick="pagination(1);" class="form-check-input" type="checkbox" name="genres[]" id="genre-{{ genre.id }}" value="{{ genre.id }}" {% if genre.id in genresQuery %}checked{% endif %}>
-                            <label class="form-check-label" for="genre-{{ genre.id }}">{{ genre.name }}</label>
-                        </div>
-                    {% endfor %}
-                </form>
             </div>
         </div>
     </section>
 
     <div class="album py-5 bg-light">
         <div class="container">
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-                {% for movie in movies['results'] %}
-                    <div class="col">
-                        <div class="card shadow-sm">
-                            {% if movie.poster_path %}
-                                <img class="bd-placeholder-img card-img-top" src="https://image.tmdb.org/t/p/w500/{{ movie.poster_path }}" alt="{{ movie.title }}" />
-                            {% endif %}
-                                
-                            <div class="card-body">
-                                <h3>{{ movie.title }}</h3>
-                                {% if movie.release_date is defined %}<h5>{{ movie.release_date|date("Y") }}</h5>{% endif %}
-                                <p class="card-text">{{ movie.overview }}</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    {% set vote = (movie.vote_average/2)|round %}
-                                    
-                                    {% for i in 1..5 %}
-                                        <i class="material-icons {% if i <= vote %}text-primary{% endif %}">grade</i>
-                                    {% endfor %} ({{ movie.vote_average/2 }}/5 - {{ movie.vote_count }} votes)
+        <div class="row">
+                <div class="col-md-4">
+                    <form id="genres-form" method="POST">
+                        {% for genre in genres %}
+                            <div class="form-check mb-3">
+                                <input onclick="pagination(1);" class="form-check-input" type="checkbox" name="genres[]" id="genre-{{ genre.id }}" value="{{ genre.id }}" {% if genre.id in genresQuery %}checked{% endif %}>
+                                <label class="form-check-label ms-2" for="genre-{{ genre.id }}">{{ genre.name }}</label>
+                            </div>
+                        {% endfor %}
+                    </form>
+                </div>
+                <div class="col-md-8">
+                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                        {% for movie in movies['results'] %}
+                            <div class="col card-movie">
+                                <div class="card shadow-sm">
+                                    {% if movie.poster_path %}
+                                        <img class="bd-placeholder-img card-img-top" src="https://image.tmdb.org/t/p/w500/{{ movie.poster_path }}" alt="{{ movie.title }}" />
+                                    {% endif %}
+                                        
+                                    <div class="card-body">
+                                        <h3>{{ movie.title }}</h3>
+                                        {% if movie.release_date is defined %}<h5>{{ movie.release_date|date("Y") }}</h5>{% endif %}
+                                        <p class="card-text">{{ movie.overview }}</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            {% set vote = (movie.vote_average/2)|round %}
+                                            
+                                            {% for i in 1..5 %}
+                                                <i class="material-icons {% if i <= vote %}text-primary{% endif %}">grade</i>
+                                            {% endfor %} ({{ movie.vote_average/2 }}/5 - {{ movie.vote_count }} votes)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        <div class="modal fade" id="movie-modal" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                {% endfor %}
-            </div>
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 mt-4">
-                <nav aria-label="Pagination">
-                    <ul class="pagination">
-                        {% set totalPages = movies['total_pages'] %}
-                        {% set prevMax = (page-1 < 10) ? 1 : page - 10 %}
-                        {% set nextMax = (page+10 >= totalPages) ? totalPages : page + 10 %}
-                        <li class="page-item {% if page == 1 %}disabled{% endif %}"><a class="page-link" {% if page != 1 %} onclick="pagination({{ page-1 }})" {% endif %}>Previous</a></li>
-                            {% if page > 1 %}
-                                {% for i in (prevMax)..(page-1)  %}
-                                    <li class="page-item"><a class="page-link" href="{{ path('main_index', {'p': i} ) }}" onclick="pagination({{ i }})">{{ i }}</a></li>
-                                {% endfor %}
-                            {% endif %}
+                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 mt-4">
+                        <nav aria-label="Pagination">
+                            <ul class="pagination">
+                                {% set totalPages = movies['total_pages'] %}
+                                {% set prevMax = (page-1 < 10) ? 1 : page - 10 %}
+                                {% set nextMax = (page+10 >= totalPages) ? totalPages : page + 10 %}
+                                <li class="page-item {% if page == 1 %}disabled{% endif %}"><a class="page-link" {% if page != 1 %} onclick="pagination({{ page-1 }})" {% endif %}>Previous</a></li>
+                                    {% if page > 1 %}
+                                        {% for i in (prevMax)..(page-1)  %}
+                                            <li class="page-item"><a class="page-link" href="{{ path('main_index', {'p': i} ) }}" onclick="pagination({{ i }})">{{ i }}</a></li>
+                                        {% endfor %}
+                                    {% endif %}
 
-                            {% for i in (page)..(nextMax)  %}
-                                <li class="page-item {% if i == page %}active{% endif %}"><a class="page-link" onclick="pagination({{ i }})">{{ i }}</a></li>
-                            {% endfor %}
-                        <li class="page-item {% if page == totalPages %}disabled{% endif %}"><a class="page-link" {% if page != totalPages %} onclick="pagination({{ page+1 }})"{% endif %}>Next</a></li>
-                    </ul>
-                </nav>
+                                    {% for i in (page)..(nextMax)  %}
+                                        <li class="page-item {% if i == page %}active{% endif %}"><a class="page-link" onclick="pagination({{ i }})">{{ i }}</a></li>
+                                    {% endfor %}
+                                <li class="page-item {% if page == totalPages %}disabled{% endif %}"><a class="page-link" {% if page != totalPages %} onclick="pagination({{ page+1 }})"{% endif %}>Next</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

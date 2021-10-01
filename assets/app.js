@@ -8,6 +8,7 @@
 const $ = require('jquery');
 global.$ = global.jQuery = $;
 require('jquery-ui');
+require('bootstrap');
 
 import './styles/app.scss';
 
