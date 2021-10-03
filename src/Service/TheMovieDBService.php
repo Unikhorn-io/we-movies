@@ -70,7 +70,6 @@ class TheMovieDBService
             );
         } catch (\GuzzleHttp\Exception\RequestException $e) {
             // Save in a log
-            var_dump($e->getResponse()); die();
             $error = $e->getResponse();
         }
 
