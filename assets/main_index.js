@@ -52,7 +52,6 @@ $(function () {
             dataType: 'JSON',
             success: function(response) {
                 cleanSearch();
-                console.log(response);
 
                 $.each(response.results, function(i, ele) {
                     $('#results-search ul').append('<li data-id="' + ele.id + '">' + ele.title + '</li>');
