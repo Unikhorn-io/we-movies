@@ -45,9 +45,9 @@ class TheMovieDBService
         $this->params = $params;
         $this->manager = $manager;
         $this->client = new Client([
-            'base_uri' => "https://api.themoviedb.org"
+            'base_uri' => 'https://api.themoviedb.org'
         ]);
-        $this->language = "fr-FR";
+        $this->language = 'fr-FR';
         $this->apiKey = $this->setApiKey();
     }
 
@@ -71,6 +71,7 @@ class TheMovieDBService
         } catch (\GuzzleHttp\Exception\RequestException $e) {
             // Save in a log
             var_dump($e->getResponse()); die();
+            $error = $e->getResponse();
         }
 
         return json_decode($response->getBody()->getContents(), true);
@@ -136,8 +137,8 @@ class TheMovieDBService
     )
     {
         return $this->call(
-            "GET",
-            "/3/movie/" . $id,
+            'GET',
+            '/3/movie/' . $id,
             []
         );
     }
@@ -147,9 +148,22 @@ class TheMovieDBService
     )
     {
         return $this->call(
-            "GET",
-            "/3/movie/" . $id . "/videos",
+            'GET',
+            '/3/movie/' . $id . '/videos',
             []
+        );
+    }
+
+    public function searchMovie(
+        string $value
+    )
+    {
+        return $this->call(
+            'GET',
+            '3/search/movie',
+            [
+                'query' =>  $value
+            ]
         );
     }
 }

@@ -14,13 +14,16 @@
     <section class="py-5 text-center container">
         <div class="row py-lg-5">
             <form id="genres-form" method="POST">
-            <div class="col-lg-6 col-md-8 mx-auto">
+            <div class="col-lg-6 col-md-8 mx-auto position-relative">
                 <h1 class="fw-light">We Movies</h1>
-                <p class="lead text-muted">Something short and leading about the collection below—its contents, the creator, etc. Make it short and sweet, but not too short so folks don’t simply skip over it entirely.</p>
+                <p class="lead text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam at vulputate sem. Nulla hendrerit nunc eu arcu semper accumsan. Praesent sodales dolor vel metus accumsan, vel rhoncus ipsum ultricies.</p>
                 
-                <div class="input-group mb-3">
-                    <span class="input-group-text">Search</span>
-                    <input name="search" class="form-control basicAutoComplete" data-url="{{ path('main_ajax_autocomplete') }}" type="text" autocomplete="off" placeholder="Movie" aria-label="Movie">
+                <div class="input-group">
+                    <span class="input-group-text">Rechercher</span>
+                    <input id="search-input" name="search" class="form-control basicAutoComplete" data-url="{{ path('main_ajax_autocomplete') }}" type="text" autocomplete="off" placeholder="Nom de film" aria-label="Nom de film">
+                </div>
+                <div id="results-search" style="display: none">
+                    <ul class="p-0 m-0"></ul>
                 </div>
             </div>
         </div>
@@ -72,7 +75,7 @@
                                         <div class="description p-4"></div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
                                     </div>
                                 </div>
                             </div>

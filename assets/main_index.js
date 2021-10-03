@@ -1,17 +1,17 @@
 
 $(function () {
-    $(".card-movie .card").on('click', function() {
+    $(document).on('click', '.card-movie .card, #results-search ul li', function() {
         $('.loading').show();
         $('body').css('overflow', 'hidden');
 
         let movieId = parseInt($(this).data('id'));
         $.ajax({
-            type: "POST",
+            type: 'POST',
             url: Routing.generate('main_ajax_movie', { id: movieId }),
             data: {
                
             },
-            dataType: "json",
+            dataType: 'JSON',
             success: function(response) {
                 cleanModal();
 
@@ -27,10 +27,44 @@ $(function () {
                 });
 
                 $('#movie-modal .description').append(response.details.overview);
-                
+
                 $('.loading').hide();
                 $('body').css('overflow', 'auto');
-                $("#movie-modal").modal('show');
+                $('#movie-modal').modal('show');
+            }
+        });
+    });
+
+    $('#search-input').on('keyup', function() {
+        let inputValue = $(this).val();
+        if (inputValue.length < 2) {
+            return;
+        }
+
+        $('.loading').show();
+
+        $.ajax({
+            type: 'POST',
+            url: Routing.generate('main_ajax_autocomplete'),
+            data: {
+               'search': inputValue,
+            },
+            dataType: 'JSON',
+            success: function(response) {
+                cleanSearch();
+                console.log(response);
+
+                $.each(response.results, function(i, ele) {
+                    $('#results-search ul').append('<li data-id="' + ele.id + '">' + ele.title + '</li>');
+                });
+
+                $('.loading').hide();
+
+                if (response.results == '') {
+                    return;
+                }
+                
+                $('#results-search').show();
             }
         });
     });
@@ -41,8 +75,16 @@ $(function () {
         $('#movie-modal .description').empty();
     }
 
-    $(".basicAutoComplete").autocomplete({
-        source: "http://local.we-movies.com/ajax/autocomplete"
+    function cleanSearch() {
+        $('#results-search ul').empty();
+    }
+
+    $('#search-input').on('focus', function() {
+        $('#results-search').show();
+    });
+
+    $('#search-input').on('focusout', function() {
+        $('#results-search').hide();
     });
 
 });

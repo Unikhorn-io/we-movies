@@ -67,7 +67,7 @@ class MainController extends AbstractController
         Request $request
     )
     {
-        $datas = $this->theMovieDBService->getMovies($request->get('search'));
+        $datas = $this->theMovieDBService->searchMovie($request->get('search'));
 
         return new JsonResponse($datas);
     }
@@ -76,8 +76,7 @@ class MainController extends AbstractController
      * @Route("/ajax/movie/{id}", options={"expose"=true}, name="ajax_movie")
      */
     public function ajaxMovie(
-        int $id,
-        Request $request
+        int $id
     )
     {
         $details = $this->theMovieDBService->getMovieDetails($id);

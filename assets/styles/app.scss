@@ -36,3 +36,34 @@ ul.pagination li {
         left: 50%;
     }
 }
+
+#results-search {
+    max-height: 100px;
+    overflow: scroll;
+    border-radius: 0px 0px 10px 10px;
+    background-color: #fff;
+    border: 1px solid #ced4da;
+    border-top: none;
+    z-index: 9;
+    position: absolute;
+    width: 100%;
+
+    ul {
+        li {
+            cursor: pointer;
+            margin: 0px;
+            padding: 5px 10px;
+            text-align: left;
+            list-style: none;
+            border-bottom: 1px solid rgb(245, 245, 245);
+
+            &:last-of-type {
+                border-bottom: none;
+            }
+
+            &:hover {
+                background-color: rgb(245, 245, 245);
+            }
+        }
+    }
+}
