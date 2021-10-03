@@ -61,7 +61,7 @@ class MainController extends AbstractController
 
 
     /**
-     * @Route("/ajax/autocomplete", name="ajax_autocomplete")
+     * @Route("/ajax/autocomplete", options={"expose"=true}, name="ajax_autocomplete")
      */
     public function ajaxAutocomplete(
         Request $request
@@ -70,6 +70,26 @@ class MainController extends AbstractController
         $datas = $this->theMovieDBService->getMovies($request->get('search'));
 
         return new JsonResponse($datas);
+    }
+
+    /**
+     * @Route("/ajax/movie/{id}", options={"expose"=true}, name="ajax_movie")
+     */
+    public function ajaxMovie(
+        int $id,
+        Request $request
+    )
+    {
+        $details = $this->theMovieDBService->getMovieDetails($id);
+        $videos = $this->theMovieDBService->getMovieVideos($id);
+
+        return new JsonResponse(
+            [
+                'id'        =>  $id,
+                'details'   =>  $details,
+                'videos'    =>  $videos
+            ]
+        );
     }
 }
 

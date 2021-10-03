@@ -130,6 +130,28 @@ class TheMovieDBService
             ]
         );
     }
+
+    public function getMovieDetails(
+        int $id
+    )
+    {
+        return $this->call(
+            "GET",
+            "/3/movie/" . $id,
+            []
+        );
+    }
+
+    public function getMovieVideos(
+        int $id
+    )
+    {
+        return $this->call(
+            "GET",
+            "/3/movie/" . $id . "/videos",
+            []
+        );
+    }
 }
 
 

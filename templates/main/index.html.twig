@@ -4,18 +4,13 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <style>
-        ul.pagination li {
-            cursor: pointer;
-        }
-
-        .card-movie .card {
-            cursor: pointer;
-        }
-    </style>
 {% endblock %}
 
 {% block body %}
+    <div class="loading" style="display:none;">
+        <img src="{{ asset('build/loading.gif') }}" alt="Loading" />
+    </div>
+
     <section class="py-5 text-center container">
         <div class="row py-lg-5">
             <form id="genres-form" method="POST">
@@ -48,7 +43,7 @@
                     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                         {% for movie in movies['results'] %}
                             <div class="col card-movie">
-                                <div class="card shadow-sm">
+                                <div data-id="{{ movie.id }}" class="card shadow-sm">
                                     {% if movie.poster_path %}
                                         <img class="bd-placeholder-img card-img-top" src="https://image.tmdb.org/t/p/w500/{{ movie.poster_path }}" alt="{{ movie.title }}" />
                                     {% endif %}
@@ -69,10 +64,12 @@
                             </div>
                         {% endfor %}
                         <div class="modal fade" id="movie-modal" tabindex="-1" aria-hidden="true">
-                            <div class="modal-dialog">
+                            <div class="modal-dialog modal-lg">
                                 <div class="modal-content">
                                     <div class="modal-body">
-                                        
+                                        <h4 class="text-center"></h4>
+                                        <div class="videos" id="accordion-video"></div>
+                                        <div class="description p-4"></div>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -85,8 +82,8 @@
                         <nav aria-label="Pagination">
                             <ul class="pagination">
                                 {% set totalPages = movies['total_pages'] %}
-                                {% set prevMax = (page-1 < 10) ? 1 : page - 10 %}
-                                {% set nextMax = (page+10 >= totalPages) ? totalPages : page + 10 %}
+                                {% set prevMax = (page-1 < 5) ? 1 : page - 5 %}
+                                {% set nextMax = (page+5 >= totalPages) ? totalPages : page + 5 %}
                                 <li class="page-item {% if page == 1 %}disabled{% endif %}"><a class="page-link" {% if page != 1 %} onclick="pagination({{ page-1 }})" {% endif %}>Previous</a></li>
                                     {% if page > 1 %}
                                         {% for i in (prevMax)..(page-1)  %}

@@ -3,3 +3,36 @@
 body {
     background-color: rgb(240, 240, 240);
 }
+
+ul.pagination li {
+    cursor: pointer;
+}
+
+.card-movie .card {
+    cursor: pointer;
+}
+
+#movie-modal {
+    #accordion-video iframe {
+        display: block;
+        margin: 0px auto;
+    }
+}
+
+.loading {
+    position: absolute;
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 9;
+    background-color: rgba(255, 255, 255, 0.50);
+
+    img {
+        position: absolute;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        left: 50%;
+    }
+}
